@@ -1,0 +1,5 @@
+PyYAML==3.11
+RPi.GPIO==0.5.6
+argparse==1.2.1
+requests==2.3.0
+wsgiref==0.1.2

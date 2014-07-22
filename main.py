@@ -18,16 +18,10 @@ with open('./config.yml') as file_data:
     config = yaml.safe_load(file_data)
 
 
-def report_success():
-    GPIO.output(config['success_pin'], GPIO.HIGH)
+def flash_led(pin):
+    GPIO.output(pin, GPIO.HIGH)
     sleep(3)
-    GPIO.output(config['success_pin'], GPIO.LOW)
-
-
-def report_failure():
-    GPIO.output(config['failure_pin'], GPIO.HIGH)
-    sleep(3)
-    GPIO.output(config['failure_pin'], GPIO.LOW)
+    GPIO.output(pin, GPIO.LOW)
 
 
 def call_api():
@@ -35,9 +29,9 @@ def call_api():
     api_method = config['api_method']
     response = REQUESTS[api_method](api_url)
     if response.status_code in SUCCESS_CODES:
-        report_success()
+        flash_led(config['success_pin'])
     else:
-        report_failure()
+        flash_led(config['failure_pin'])
 
 
 def main():

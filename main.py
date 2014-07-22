@@ -44,7 +44,9 @@ def main():
     GPIO.setup(config['success_pin'], GPIO.OUT)
     GPIO.setup(config['failure_pin'], GPIO.OUT)
     GPIO.setup(config['button_pin'], GPIO.IN, pull_up_down=GPIO.PUD_UP)
-    GPIO.add_event_detect(config['button_pin'], GPIO.FALLING, callback=call_api, bouncetime=400)
+    while True:
+        GPIO.wait_for_edge(config['button_pin'], GPIO.FALLING)
+        call_api()
 
 
 if __name__ == '__main__':

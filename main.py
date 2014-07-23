@@ -24,21 +24,11 @@ def flash_led(pin):
     GPIO.output(pin, GPIO.LOW)
 
 
-def call_api():
-    api_url = config['api_url']
-    api_method = config['api_method']
-    response = REQUESTS[api_method](api_url)
-    if response.status_code in SUCCESS_CODES:
-        flash_led(config['success_pin'])
-    else:
-        flash_led(config['failure_pin'])
-
-
 def register_actions():
     for k, v in config['actions'].iteritems():
         GPIO.setup(v['button_pin'], GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-        def call_api():
+        def call_api(pin):
             api_url = v['api_url']
             api_method = v['api_method']
             api_data = v['api_data']

@@ -34,13 +34,39 @@ def call_api():
         flash_led(config['failure_pin'])
 
 
+def register_actions():
+    for k, v in config['actions'].iteritems():
+        GPIO.setup(v['button_pin'], GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+        def call_api():
+            api_url = v['api_url']
+            api_method = v['api_method']
+            api_data = v['api_data']
+
+            if api_method in ["POST", "PUT"]:
+                response = REQUESTS[api_method](api_url, data=api_data)
+            else:
+                response = REQUESTS[api_method](api_url)
+
+            if response.status_code in SUCCESS_CODES:
+                flash_led(config['success_pin'])
+            else:
+                flash_led(config['failure_pin'])
+
+        GPIO.add_event_detect(v['button_pin'], GPIO.FALLING, callback=call_api, bouncetime=300)
+
+
+
 def main():
-    GPIO.setup(config['success_pin'], GPIO.OUT)
-    GPIO.setup(config['failure_pin'], GPIO.OUT)
-    GPIO.setup(config['button_pin'], GPIO.IN, pull_up_down=GPIO.PUD_UP)
-    while True:
-        GPIO.wait_for_edge(config['button_pin'], GPIO.FALLING)
-        call_api()
+    try:
+        GPIO.setup(config['success_pin'], GPIO.OUT)
+        GPIO.setup(config['failure_pin'], GPIO.OUT)
+        register_actions()
+
+        while True:
+            pass
+    except:
+        GPIO.cleanup()
 
 
 if __name__ == '__main__':

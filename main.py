@@ -25,13 +25,13 @@ def flash_led(pin):
 
 
 def register_actions():
-    for k, v in config['actions'].iteritems():
-        GPIO.setup(v['button_pin'], GPIO.IN, pull_up_down=GPIO.PUD_UP)
+    for action in config['actions']:
+        GPIO.setup(action['button_pin'], GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
         def action(pin):
-            api_url = v['api_url']
-            api_method = v['api_method']
-            api_data = v['api_data']
+            api_url = action['api_url']
+            api_method = action['api_method']
+            api_data = action['api_data']
 
             if api_method in ["POST", "PUT"]:
                 response = REQUESTS[api_method](api_url, data=api_data)
@@ -43,7 +43,7 @@ def register_actions():
             else:
                 flash_led(config['failure_pin'])
 
-        GPIO.add_event_detect(v['button_pin'], GPIO.FALLING, callback=action, bouncetime=300)
+        GPIO.add_event_detect(action['button_pin'], GPIO.FALLING, callback=action, bouncetime=300)
 
 
 

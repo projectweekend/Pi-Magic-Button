@@ -62,7 +62,4 @@ sudo service magic-button start
 
 ### TODO
 
-* Add JSON POST option
-* Make `success_pin` and `failure_pin` optional in case not wanted
 * Add an install script to do all the boring setup stuff
-* Add real documentation once things are settled

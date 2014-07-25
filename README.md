@@ -1,5 +1,6 @@
 This program makes it easy to map physical buttons, connected to the Raspberry Pi's GPIO pins, to API end points. Details for each button are managed in a configuration file. All you really need to do is wire things up, then edit the file.
 
+
 ### Configuration
 
 The actions for each button need to be defined in a file named: `config.yml`. Create this file inside the root of `/Pi-Magic-Button`. Here is what an example file might look like:
@@ -22,9 +23,20 @@ actions:
         another different_field: some string data
 ~~~
 
+#### Main Properties
+
 * `succes_pin`: This pin can be connected to an LED that will light up if the button's action successfully contacted the API end point.
 * `failure_pin`: This pin can be connected to an LED that will light up if the button's action did not successfully contact the API end point.
 * `actions`: This is an array of configurations corresponding to each button that has been wired up to the Raspberry Pi.
+
+#### Button Properties
+
+Each button item in the configuration file's `actions` array has 4 properties.
+
+* `button_pin`: This is the pin connected to the button. Under the hood each button pin is initialized using a software-defined pull up resistor. When wiring up the button connect it to ground so that it will pull the pin low when pressed.
+* `api_url`: This is the URL that the button will make a request to when pressed
+* `api_method`: This is the HTTP request method to use with the URL: `GET`, `POST`, `PUT`, `DELETE`
+* `api_data`: Each property defined in this object will be passed to the `api_url` in the body of a `POST` or `PUT` request. `GET` and `DELETE` requests will ignore this.
 
 
 ### Upstart
@@ -50,5 +62,7 @@ sudo service magic-button start
 
 ### TODO
 
+* Add JSON POST option
+* Make `success_pin` and `failure_pin` optional in case not wanted
 * Add an install script to do all the boring setup stuff
 * Add real documentation once things are settled

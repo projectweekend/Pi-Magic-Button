@@ -27,7 +27,7 @@ actions:
 
 * `succes_pin`: This pin can be connected to an LED that will light up if the button's action successfully contacted the API end point.
 * `failure_pin`: This pin can be connected to an LED that will light up if the button's action did not successfully contact the API end point.
-* `actions`: This is an array of configurations corresponding to each button that has been wired up to the Raspberry Pi.
+* `actions`: This is an array of configurations for each button that has been wired up to the Raspberry Pi.
 
 #### Button Properties
 

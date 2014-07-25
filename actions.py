@@ -41,6 +41,8 @@ def register_buttons():
             api_method = a['api_method']
             api_data = a['api_data']
 
+            print(api_data)
+
             if api_method in ["POST", "PUT"]:
                 try:
                     if a['use_json']:

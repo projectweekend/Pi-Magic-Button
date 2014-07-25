@@ -42,8 +42,11 @@ def register_buttons():
             api_data = a['api_data']
 
             if api_method in ["POST", "PUT"]:
-                if a['use_json']:
-                    api_data = json.dumps(api_data)
+                try:
+                    if a['use_json']:
+                        api_data = json.dumps(api_data)
+                except KeyError:
+                    pass
                 response = REQUESTS[api_method](api_url, data=api_data)
             else:
                 response = REQUESTS[api_method](api_url)

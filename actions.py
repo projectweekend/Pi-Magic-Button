@@ -36,11 +36,6 @@ def register_buttons():
     for a in config['actions']:
         GPIO.setup(a['button_pin'], GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-        print(a['button_pin'])
-        print(a['api_url'])
-        print(a['api_method'])
-        print(a['api_data'])
-
         def action(pin):
             api_url = a['api_url']
             api_method = a['api_method']
@@ -56,7 +51,6 @@ def register_buttons():
             else:
                 response = REQUESTS[api_method](api_url)
 
-            print(response.status_code)
             if response.status_code in SUCCESS_CODES:
                 flash_led(config['success_pin'])
             else:

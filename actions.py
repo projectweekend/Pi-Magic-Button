@@ -1,7 +1,9 @@
+import json
 import yaml
 import requests
 import RPi.GPIO as GPIO
 from time import sleep
+
 
 REQUESTS = {
     "GET": requests.get,
@@ -12,8 +14,6 @@ REQUESTS = {
 SUCCESS_CODES = [200, 201, 204]
 
 
-GPIO.setmode(GPIO.BCM)
-GPIO.setwarnings(False)
 with open('./config.yml') as file_data:
     config = yaml.safe_load(file_data)
 
@@ -24,7 +24,15 @@ def flash_led(pin):
     GPIO.output(pin, GPIO.LOW)
 
 
-def register_actions():
+def register_feedback_pins():
+    try:
+        GPIO.setup(config['success_pin'], GPIO.OUT)
+        GPIO.setup(config['failure_pin'], GPIO.OUT)
+    except KeyError:
+        pass
+
+
+def register_buttons():
     for action in config['actions']:
         GPIO.setup(action['button_pin'], GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
@@ -34,6 +42,8 @@ def register_actions():
             api_data = action['api_data']
 
             if api_method in ["POST", "PUT"]:
+                if action['use_json']:
+                    api_data = json.dumps(api_data)
                 response = REQUESTS[api_method](api_url, data=api_data)
             else:
                 response = REQUESTS[api_method](api_url)
@@ -44,20 +54,3 @@ def register_actions():
                 flash_led(config['failure_pin'])
 
         GPIO.add_event_detect(action['button_pin'], GPIO.FALLING, callback=action, bouncetime=300)
-
-
-
-def main():
-    try:
-        GPIO.setup(config['success_pin'], GPIO.OUT)
-        GPIO.setup(config['failure_pin'], GPIO.OUT)
-        register_actions()
-
-        while True:
-            pass
-    except:
-        GPIO.cleanup()
-
-
-if __name__ == '__main__':
-    main()

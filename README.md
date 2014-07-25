@@ -69,19 +69,19 @@ Each button item in the configuration file's `actions` array has 4 properties.
 ### Upstart
 ------------------------------------------------------------------------------
 
-[Upstart](http://upstart.ubuntu.com/) is used to run this program in the background on the Raspberry Pi. It will automatically start on boot as well. Every time you edit the `config.yml` you will need to restart the `magic-button` service so that it can load the new configurations. Use this command to do that:
+[Upstart](http://upstart.ubuntu.com/) is used to run this program in the background on the Raspberry Pi. It will automatically start on boot as well. Every time you edit the `config.yml` you will need to restart the `magic-button` service so that it can load the new configurations. Use this command:
 
 ```
 sudo service magic-button restart
 ```
 
-If you ever need to completely stop the service from running you can use this command:
+To stop the service use this command:
 
 ```
 sudo service magic-button stop
 ```
 
-To start it back up again, use this:
+To start it back up again, use this command:
 
 ```
 sudo service magic-button start

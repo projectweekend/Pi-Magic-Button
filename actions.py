@@ -41,6 +41,8 @@ def register_buttons():
             api_method = a['api_method']
             api_data = a['api_data']
 
+            print(api_url)
+            print(api_method)
             print(api_data)
 
             if api_method in ["POST", "PUT"]:
@@ -53,6 +55,7 @@ def register_buttons():
             else:
                 response = REQUESTS[api_method](api_url)
 
+            print(response.status_code)
             if response.status_code in SUCCESS_CODES:
                 flash_led(config['success_pin'])
             else:

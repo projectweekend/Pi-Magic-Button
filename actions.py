@@ -36,14 +36,15 @@ def register_buttons():
     for a in config['actions']:
         GPIO.setup(a['button_pin'], GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
+        print(a['button_pin'])
+        print(a['api_url'])
+        print(a['api_method'])
+        print(a['api_data'])
+
         def action(pin):
             api_url = a['api_url']
             api_method = a['api_method']
             api_data = a['api_data']
-
-            print(api_url)
-            print(api_method)
-            print(api_data)
 
             if api_method in ["POST", "PUT"]:
                 try:

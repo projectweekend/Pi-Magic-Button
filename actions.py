@@ -34,19 +34,21 @@ def register_feedback_pins():
 
 def register_buttons():
     for a in config['actions']:
-        GPIO.setup(a['button_pin'], GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        button_pin = a['button_pin']
+        api_url = a['api_url']
+        api_method = a['api_method']
+        api_data = a['api_data']
+        try:
+            use_json = a['use_json']
+        except KeyError:
+            use_json = False
+
+        GPIO.setup(button_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
         def action(pin):
-            api_url = a['api_url']
-            api_method = a['api_method']
-            api_data = a['api_data']
-
             if api_method in ["POST", "PUT"]:
-                try:
-                    if a['use_json']:
-                        api_data = json.dumps(api_data)
-                except KeyError:
-                    pass
+                if use_json:
+                    api_data = json.dumps(api_data)
                 response = REQUESTS[api_method](api_url, data=api_data)
             else:
                 response = REQUESTS[api_method](api_url)
@@ -56,4 +58,4 @@ def register_buttons():
             else:
                 flash_led(config['failure_pin'])
 
-        GPIO.add_event_detect(a['button_pin'], GPIO.FALLING, callback=action, bouncetime=300)
+        GPIO.add_event_detect(button_pin, GPIO.FALLING, callback=action, bouncetime=300)

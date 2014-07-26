@@ -46,10 +46,11 @@ def register_buttons():
         GPIO.setup(button_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
         def action(pin):
+            data = api_data
             if api_method in ["POST", "PUT"]:
                 if use_json:
-                    api_data = json.dumps(api_data)
-                response = REQUESTS[api_method](api_url, data=api_data)
+                    data = json.dumps(api_data)
+                response = REQUESTS[api_method](api_url, data=data)
             else:
                 response = REQUESTS[api_method](api_url)
 

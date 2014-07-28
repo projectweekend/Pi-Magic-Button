@@ -36,9 +36,11 @@ def build_callback(url, method, data, use_json):
 
     if use_json:
         data = json.dumps(data)
+        print(data)
 
     def action(pin):
         if method in ["POST", "PUT"]:
+            print(data)
             response = REQUESTS[method](url, data=data)
         else:
             response = REQUESTS[method](url)

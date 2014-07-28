@@ -64,6 +64,6 @@ def register_buttons():
 
         GPIO.setup(button_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-        action = build_callback(api_url, api_method, api_data, use_json)
+        callback = build_callback(api_url, api_method, api_data, use_json)
 
-        GPIO.add_event_detect(button_pin, GPIO.FALLING, callback=action, bouncetime=300)
+        GPIO.add_event_detect(button_pin, GPIO.FALLING, callback=callback, bouncetime=300)

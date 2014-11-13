@@ -47,7 +47,7 @@ actions:
       api_method: POST
       api_data:
         a_different_field: 77777
-        another different_field: some string data
+        another_different_field: some string data
 ~~~
 
 #### Main Properties

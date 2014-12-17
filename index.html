@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Pi-magic-button : Physical button + API end point">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Pi-magic-button</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/projectweekend/Pi-Magic-Button">View on GitHub</a>
+
+          <h1 id="project_title">Pi-magic-button</h1>
+          <h2 id="project_tagline">Physical button + API end point</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/projectweekend/Pi-Magic-Button/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/projectweekend/Pi-Magic-Button/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <p>This program makes it easy to map physical buttons, connected to the Raspberry Pi's GPIO pins, to API end points. Details for each button are managed in a configuration file. All you really need to do is wire things up, then edit the file.</p>
+
+<hr>
+
+<h3>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h3>
+
+<hr>
+
+<h4>
+<a id="step-1-clone-this-repo" class="anchor" href="#step-1-clone-this-repo" aria-hidden="true"><span class="octicon octicon-link"></span></a>Step 1: Clone this repo</h4>
+
+<pre><code>git clone https://github.com/projectweekend/Pi-Magic-Button.git
+</code></pre>
+
+<h4>
+<a id="step-2-run-install-script" class="anchor" href="#step-2-run-install-script" aria-hidden="true"><span class="octicon octicon-link"></span></a>Step 2: Run install script</h4>
+
+<p>From the project directory <code>Pi-Magic-Button/</code>, run the following command:</p>
+
+<pre><code>./install.sh
+</code></pre>
+
+<p><strong>NOTE:</strong> This step will probably take several minutes to complete. When the script begins to install <a href="http://upstart.ubuntu.com/">Upstart</a>, you will receive a warning. It will prompt you to type the following message to confirm the installation: <code>Yes, do as I say!</code>. You must type it exactly.</p>
+
+<h4>
+<a id="step-3-reboot" class="anchor" href="#step-3-reboot" aria-hidden="true"><span class="octicon octicon-link"></span></a>Step 3: Reboot</h4>
+
+<pre><code>sudo reboot
+</code></pre>
+
+<hr>
+
+<h3>
+<a id="configuration" class="anchor" href="#configuration" aria-hidden="true"><span class="octicon octicon-link"></span></a>Configuration</h3>
+
+<hr>
+
+<p>The actions for each button need to be defined in a file named: <code>config.yml</code>. The install script will create an empty one in the root of <code>/Pi-Magic-Button</code>. Here is a complete example file:</p>
+
+<div class="highlight highlight-yaml"><pre><span class="pl-c1"><span class="pl-ent">success_pin:</span> 17</span>
+<span class="pl-c1"><span class="pl-ent">failure_pin:</span> 22</span>
+<span class="pl-s1"><span class="pl-ent">actions:</span><span class="pl-s1"></span></span>
+    <span class="pl-c1">- <span class="pl-ent">button_pin:</span> 4</span>
+      <span class="pl-s1"><span class="pl-ent">api_url:</span> <span class="pl-s1">https://www.something.com/api/blah</span></span>
+      <span class="pl-s1"><span class="pl-ent">api_method:</span> <span class="pl-s1">POST</span></span>
+      <span class="pl-s1"><span class="pl-ent">api_data:</span><span class="pl-s1"></span></span>
+        <span class="pl-c1"><span class="pl-ent">some_field:</span> 122345</span>
+        <span class="pl-s1"><span class="pl-ent">some_other_field:</span> <span class="pl-s1">some string data</span></span>
+    <span class="pl-c1">- <span class="pl-ent">button_pin:</span> 18</span>
+      <span class="pl-s1"><span class="pl-ent">api_url:</span> <span class="pl-s1">https://www.something.com/api/test</span></span>
+      <span class="pl-s1"><span class="pl-ent">api_method:</span> <span class="pl-s1">POST</span></span>
+      <span class="pl-s1"><span class="pl-ent">api_data:</span><span class="pl-s1"></span></span>
+        <span class="pl-c1"><span class="pl-ent">a_different_field:</span> 77777</span>
+        <span class="pl-s1"><span class="pl-ent">another_different_field:</span> <span class="pl-s1">some string data</span></span></pre></div>
+
+<h4>
+<a id="main-properties" class="anchor" href="#main-properties" aria-hidden="true"><span class="octicon octicon-link"></span></a>Main Properties</h4>
+
+<ul>
+<li>
+<code>succes_pin</code>: This pin can be connected to an LED that will light up if the button's action successfully contacted the API end point.</li>
+<li>
+<code>failure_pin</code>: This pin can be connected to an LED that will light up if the button's action did not successfully contact the API end point.</li>
+<li>
+<code>actions</code>: This is an array of configurations for each button that has been wired up to the Raspberry Pi.</li>
+</ul>
+
+<h4>
+<a id="button-properties" class="anchor" href="#button-properties" aria-hidden="true"><span class="octicon octicon-link"></span></a>Button Properties</h4>
+
+<p>Each button item in the configuration file's <code>actions</code> array has 4 properties.</p>
+
+<ul>
+<li>
+<code>button_pin</code>: This is the pin connected to the button. Under the hood each button pin is initialized using a software-defined pull up resistor. When wiring up the button connect it to ground so that it will pull the pin low when pressed.</li>
+<li>
+<code>api_url</code>: This is the URL that the button will make a request to when pressed</li>
+<li>
+<code>api_method</code>: This is the HTTP request method to use with the URL: <code>GET</code>, <code>POST</code>, <code>PUT</code>, <code>DELETE</code>
+</li>
+<li>
+<code>api_data</code>: Each property defined in this object will be passed to the <code>api_url</code> in the body of a <code>POST</code> or <code>PUT</code> request. <code>GET</code> and <code>DELETE</code> requests will ignore this.</li>
+</ul>
+
+<hr>
+
+<h3>
+<a id="upstart" class="anchor" href="#upstart" aria-hidden="true"><span class="octicon octicon-link"></span></a>Upstart</h3>
+
+<hr>
+
+<p><a href="http://upstart.ubuntu.com/">Upstart</a> is used to run this program in the background on the Raspberry Pi. It will automatically start on boot as well. Every time you edit the <code>config.yml</code> you will need to restart the <code>magic-button</code> service so that it can load the new configurations. Use this command:</p>
+
+<pre><code>sudo service magic-button restart
+</code></pre>
+
+<p>To stop the service use this command:</p>
+
+<pre><code>sudo service magic-button stop
+</code></pre>
+
+<p>To start it back up again, use this command:</p>
+
+<pre><code>sudo service magic-button start
+</code></pre>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Pi-magic-button maintained by <a href="https://github.com/projectweekend">projectweekend</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
